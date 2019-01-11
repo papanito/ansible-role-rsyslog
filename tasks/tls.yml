@@ -1,0 +1,15 @@
+# Securely send your logs to Loggly using TLS encryption. 
+# https://www.loggly.com/docs/rsyslog-tls-configuration/
+
+- name: Loggly | Install required software
+  package:
+    name: rsyslog-gnutls
+    state: present
+- name: Loggly | Create certificate folder for tls
+  file:
+    path: "{{ loggly_cert_path }}"
+    state: directory
+- name: Loggly | Download loggly certificate {{ loggly_cert }}"
+  get_url:
+    url: https://logdog.loggly.com/media/{{ loggly_cert }}
+    dest: "{{ loggly_cert_path }}/{{ loggly_cert }}"

@@ -1,0 +1,6 @@
+---
+- name: Loggly | Ensure journald forwards logs to rsyslog
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    line: "ForwardToSyslog=Yes"
+  notify: Restart systemd-journald

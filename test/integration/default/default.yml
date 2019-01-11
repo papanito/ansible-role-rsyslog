@@ -1,0 +1,7 @@
+# vim:ft=ansible:
+---
+
+- hosts: all
+  roles:
+    - ansible-loggly
+  

@@ -1,0 +1,18 @@
+---
+rsyslog_tls:       true
+rsyslog_tag:       syslog
+rsyslog_srv:       loggly.com
+rsyslog_cert:      syslogca.crt
+rsyslog_cert_path: /etc/rsyslog.d/keys/ca.d
+rsyslog: loggly.com
+  token:      YOUR_TOKEN_GOES_HERE
+  peer:       *.loggly.com
+  url:        logs-01.loggly.com
+  port:       514
+  port_tls:   6514
+rsyslog: logz.io
+  token:      YOUR_TOKEN_GOES_HERE
+  peer:       *.loggly.com
+  url:        logs-01.loggly.com
+  port:       514
+  port_tls:   6514

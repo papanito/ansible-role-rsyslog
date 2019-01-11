@@ -1,0 +1,27 @@
+#===============================================================================
+#
+# Forward syslog to Loggly.com
+#
+#-------------------------------------------------------------------------------
+# {{ ansible_managed }}
+#===============================================================================
+
+
+# Setup disk assisted queues
+$WorkDirectory /var/spool/rsyslog # where to place spool files
+$ActionQueueFileName fwdRule1     # unique name prefix for spool files
+$ActionQueueMaxDiskSpace 1g       # 1gb space limit (use as much as possible)
+$ActionQueueSaveOnShutdown on     # save messages to disk on shutdown
+$ActionQueueType LinkedList       # run asynchronously
+$ActionResumeRetryCount -1        # infinite retries if host is down
+
+{% if rsyslog_tls %}$DefaultNetstreamDriverCAFile {{ rsyslog_cert_path }}/{{ rsyslog_cert }}{% endif %}
+
+template(name="MyFormat" type="string" string="<%pri%>%protocol-version% %timestamp:::date-rfc3339% {{ inventory_hostname }} %app-name% %procid% %msgid% [{{ loggly_token }}@41058 {% if loggly_tag %}tag=\"{{ loggly_tag }}\"{% endif %}] %msg%\n")
+
+# Send messages over TCP using the template.
+{% if rsyslog_tls %}
+action(type="omfwd" protocol="tcp" target="{{ loggly_url }}" port="{{ loggly_port_tls }}" template="MyFormat" StreamDriver="gtls" StreamDriverMode="1" StreamDriverAuthMode="x509/name" StreamDriverPermittedPeers="*.loggly.com")
+{% else %}
+action(type="omfwd" protocol="tcp" target="{{ loggly_url }}" port="{{ loggly_port }}" template="MyFormat")
+{% endif %}

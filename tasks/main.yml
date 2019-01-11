@@ -1,0 +1,32 @@
+# vim:ft=ansible:
+#
+# Copyright (c) 2016 Jason McVetta <jason.mcvetta@gmail.com>.  This is Free
+# Software, released under the terms of the GPL v3.  See
+# http://www.gnu.org/copyleft/gpl.html for details.  Resist intellectual
+# serfdom - the ownership of ideas is akin to slavery.
+---
+
+- name: Ensure rsyslog is installed
+  apt:
+    name: rsyslog
+    state: present
+    update_cache: yes
+
+- name: Ensure rsyslog for tls config is present
+  import_tasks: tls.yml
+  when: rsyslog_tls | default('false') | bool
+
+- name: Ensure rsyslog config is present
+  template:
+    src: 22-rsyslog.conf.j2
+    dest: /etc/rsyslog.d/22-rsyslog.conf
+  notify: Restart rsyslog
+
+- name: Check which init system is in place
+  shell: cat /proc/1/status | grep '[Nn]ame'|sed 's/[Nn]ame:\s*//'
+  register: init_system
+
+# Ref: https://www.loggly.com/docs/systemd-logs/
+- name: Configure systemd to forward logs to rsyslog
+  import_tasks: journald.yml
+  when: init_system.stdout == "systemd"
