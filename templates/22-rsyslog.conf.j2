@@ -17,11 +17,11 @@ $ActionResumeRetryCount -1        # infinite retries if host is down
 
 {% if rsyslog_tls %}$DefaultNetstreamDriverCAFile {{ rsyslog_cert_path }}/{{ rsyslog_cert }}{% endif %}
 
-template(name="MyFormat" type="string" string="<%pri%>%protocol-version% %timestamp:::date-rfc3339% {{ inventory_hostname }} %app-name% %procid% %msgid% [{{ loggly_token }}@41058 {% if loggly_tag %}tag=\"{{ loggly_tag }}\"{% endif %}] %msg%\n")
+template(name="MyFormat" type="string" string="<%pri%>%protocol-version% %timestamp:::date-rfc3339% {{ inventory_hostname }} %app-name% %procid% %msgid% [{{ services[rsyslog_srv].token }}@41058 {% if rsyslog_tag %}tag=\"{{ rsyslog_tag }}\"{% endif %}] %msg%\n")
 
 # Send messages over TCP using the template.
 {% if rsyslog_tls %}
-action(type="omfwd" protocol="tcp" target="{{ loggly_url }}" port="{{ loggly_port_tls }}" template="MyFormat" StreamDriver="gtls" StreamDriverMode="1" StreamDriverAuthMode="x509/name" StreamDriverPermittedPeers="*.loggly.com")
+action(type="omfwd" protocol="tcp" target="{{ services[rsyslog_srv].url }}" port="{{ services[rsyslog_srv].port_tls  }}" template="MyFormat" StreamDriver="gtls" StreamDriverMode="1" StreamDriverAuthMode="x509/name" StreamDriverPermittedPeers="{{ services[rsyslog_srv].peer  }}")
 {% else %}
-action(type="omfwd" protocol="tcp" target="{{ loggly_url }}" port="{{ loggly_port }}" template="MyFormat")
+action(type="omfwd" protocol="tcp" target="{{ services[rsyslog_srv].url  }}" port="{{ services[rsyslog_srv].port }}" template="MyFormat")
 {% endif %}

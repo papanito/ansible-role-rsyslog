@@ -1,18 +1,23 @@
 ---
+rsyslog_srv:       logz.io # set this to use the correct service
 rsyslog_tls:       true
 rsyslog_tag:       syslog
-rsyslog_srv:       loggly.com
-rsyslog_cert:      syslogca.crt
-rsyslog_cert_path: /etc/rsyslog.d/keys/ca.d
-rsyslog: loggly.com
-  token:      YOUR_TOKEN_GOES_HERE
-  peer:       *.loggly.com
-  url:        logs-01.loggly.com
-  port:       514
-  port_tls:   6514
-rsyslog: logz.io
-  token:      YOUR_TOKEN_GOES_HERE
-  peer:       *.loggly.com
-  url:        logs-01.loggly.com
-  port:       514
-  port_tls:   6514
+rsyslog_cert:      rsyslog.crt
+rsyslog_cert_path: /etc/rsyslog.d/keys/ca.d/
+services:
+  loggly.com:
+    token:      YOUR_TOKEN_GOES_HERE
+    peer:       "*.loggly.com"
+    url:        logs-01.loggly.com
+    cert_name:  syslogca.crt
+    cert_path:  https://logdog.loggly.com/media/
+    port:       514
+    port_tls:   6514
+  logz.io:
+    token:      YOUR_TOKEN_GOES_HERE
+    peer:       "*.logz.io"
+    url:        listener.logz.io
+    cert_name:  COMODORSADomainValidationSecureServerCA.crt
+    cert_path:  https://raw.githubusercontent.com/logzio/public-certificates/master/
+    port:       5000
+    port_tls:   5015
