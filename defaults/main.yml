@@ -5,6 +5,8 @@ rsyslog_tag:       syslog
 rsyslog_token:     YOUR_TOKEN_GOES_HERE
 rsyslog_cert:      rsyslog.crt
 rsyslog_cert_path: /etc/rsyslog.d/keys/ca.d
+rsyslog_conf_path: /etc/rsyslog.d/
+rsyslog_conf_file: 22-rsyslog.conf
 services:
   loggly.com:
     peer:       "*.loggly.com"

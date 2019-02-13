@@ -1,15 +1,26 @@
 # Securely send your logs to Loggly using TLS encryption. 
 # https://www.loggly.com/docs/rsyslog-tls-configuration/
 
-- name: Rsyslog | Install required software
+- name: TLS | Install required software
   package:
     name: rsyslog-gnutls
     state: present
-- name: Rsyslog | Create certificate folder for tls
+
+- name: TLS | check for existing certificates
+  shell: ls -l {{ rsyslog_cert_path }}
+  register: capture
+
+- name: TLS | remove unexpected certificates
+  file: path={{ rsyslog_cert_path }}/{{item}} state=absent
+  with_items: capture.stdout_lines
+  when: item != rsyslog_cert
+
+- name: TLS | Create certificate folder for tls
   file:
     path: "{{ rsyslog_cert_path }}"
     state: directory
-- name: Rsyslog | Download certificate {{ services[rsyslog_srv].cert_path }}{{ services[rsyslog_srv].cert_name }}
+
+- name: TLS | Download certificate {{ services[rsyslog_srv].cert_path }}{{ services[rsyslog_srv].cert_name }}
   get_url:
     url: "{{ services[rsyslog_srv].cert_path }}{{ services[rsyslog_srv].cert_name }}"
     dest: "{{ rsyslog_cert_path }}/{{ rsyslog_cert }}"
