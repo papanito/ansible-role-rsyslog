@@ -1,47 +1,35 @@
-ansible-rsyslog
-===============
+# ansible-rsyslog
 
-Ansible role to forward syslog to a log service like Loggly.com or (Logz.io)(https://logz.io)
-
-The role also forwards the systemd logs to syslogs as described. Details can be found here
+Ansible role to forward syslog to a log service like [Loggly.com](https://loggly.com) or [Logz.io](https://logz.io). The role also forwards the systemd logs to syslog. Details regarding the syslog configuration can be found here:
 
 * [Loggly.com](https://www.loggly.com/docs/systemd-logs/)
 * [Logz.io](https://app.logz.io/#/dashboard/data-sources/rsyslog-overTLS)
 
-Remark
-------
+## Remark
 
 This role is based on the role from [jmcvetta/ansible-loggly](https://github.com/jmcvetta/ansible-loggly)
 
-Requirements
-------------
+## Requirements
 
-Respective account 
+Respective account for the logging serivce and a token
 
-Role Variables
---------------
+## Role Variables
 
-The following role variables are defined as default and can be overriden in the playbook
+There are common role variables and service specfic ones. Most variables should be fine (as tested). Thus it's recommended to only define these variables
 
 ```yaml
-loggly_token:     YOUR_TOKEN_GOES_HERE
-loggly_tag:       syslog
-loggly_url:       logs-01.loggly.com
-loggly_cert:      logs-01.loggly.com_sha12.crt
-loggly_cert_path: /etc/rsyslog.d/keys/ca.d
-loggly_port:      514
-loggly_port_tls:  6514
+rsyslog_srv:       logz.io # set this to use the correct service
+rsyslog_tls:       true # or false in case you want plaintext
+rsyslog_tag:       syslog
+rsyslog_token:     YOUR_TOKEN_GOES_HERE
+rsyslog_cert:      rsyslog.crt
 ```
 
-In addition you can set `loggly_tls: true` in order to use [tls configuration](https://www.loggly.com/docs/rsyslog-tls-configuration/) instead of plaintext
-
-Dependencies
-------------
+## Dependencies
 
 n/a
 
-Testing
--------
+## Testing
 
 Assumes you have Ruby and Bundler already installed.
 
@@ -50,14 +38,21 @@ bundle install  # Only required once
 bundle exec kitchen test
 ```
 
-Example Playbook
-----------------
+## Example Playbook
 
-    - hosts: servers
-      roles:
-         - papanito.loggly
+```yml
+- name: Forward server logs to rsyslog service
+  hosts: "servers"
+  vars:
+    rsyslog_srv: logz.io
+    rsyslog_tls: true
+    rsyslog_tag: syslog
+    rsyslog_token: xxxxxxxxxxxxxxxxxxxxxxxx
 
-License
--------
+  roles:
+     - papanito.rsyslog
+```
 
-This is Free Software, released under the terms of the Apache v2 license. 
+## License
+
+This is Free Software, released under the terms of the Apache v2 license.
