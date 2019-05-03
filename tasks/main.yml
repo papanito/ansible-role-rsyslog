@@ -15,10 +15,12 @@
 - name: Ensure rsyslog for tls config is present
   import_tasks: tls.yml
   when: rsyslog_tls | default('false') | bool
+  changed_when: false
 
 - name: Check for existing config files
   shell: ls -l {{ rsyslog_conf_path }}
   register: capture
+  changed_when: false
 
 - name: Remove unexpected rsyslog config files
   file: path={{ rsyslog_conf_path }}/{{ item }} state=absent
@@ -34,6 +36,7 @@
 - name: Check which init system is in place
   shell: set -e && cat /proc/1/status | grep '[Nn]ame'|sed 's/[Nn]ame:\s*//'
   register: init_system
+  changed_when: false
 
 # Ref: https://www.loggly.com/docs/systemd-logs/
 - name: Configure systemd to forward logs to rsyslog

@@ -9,6 +9,7 @@
 - name: TLS | check for existing certificates
   shell: ls -l {{ rsyslog_cert_path }}
   register: capture
+  changed_when: false
 
 - name: TLS | remove unexpected certificates
   file: path={{ rsyslog_cert_path }}/{{ item }} state=absent
