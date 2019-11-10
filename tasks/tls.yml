@@ -6,6 +6,11 @@
     name: rsyslog-gnutls
     state: present
 
+- name: TLS | Esnure directory exists
+  file:
+    path: '{{ rsyslog_cert_path }}'
+    state: directory
+
 - name: TLS | check for existing certificates
   shell: ls -l {{ rsyslog_cert_path }}
   register: capture

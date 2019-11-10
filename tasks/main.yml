@@ -6,11 +6,19 @@
 # serfdom - the ownership of ideas is akin to slavery.
 ---
 
-- name: Ensure rsyslog is installed
+- name: Ensure rsyslog is installed (Debian)
   apt:
     name: rsyslog
     state: present
     update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Ensure rsyslog is installed (RedHat)
+  yum:
+    name: rsyslog
+    state: present
+    update_cache: yes
+  when: ansible_os_family == 'RedHat'
 
 - name: Ensure rsyslog for tls config is present
   import_tasks: tls.yml
