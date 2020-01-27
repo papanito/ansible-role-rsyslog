@@ -7,6 +7,14 @@ rsyslog_cert:      rsyslog.crt
 rsyslog_cert_path: /etc/rsyslog.d/keys/
 rsyslog_conf_path: /etc/rsyslog.d/
 rsyslog_conf_file: 22-rsyslog.conf
+
+rsyslog_action_queue_file_name: 'fwdRule1'
+rsyslog_action_queue_max_disk_space: '1g'
+rsyslog_action_queue_save_on_shutdown: 'on'
+rsyslog_action_queue_action_type: 'LinkedList'
+rsyslog_action_resume_retry_count: -1
+rsyslog_additional_config: {}
+
 services:
   loggly.com:
     peer:       "*.loggly.com"
