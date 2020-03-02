@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: rsyslog
   author: Adrian Wyssmann
   description: Ansible role to forward syslog to syslog service
   company: wyssmann.com
