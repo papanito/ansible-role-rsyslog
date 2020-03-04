@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - papanito.loggly
+    - ansible-role-rsyslog
