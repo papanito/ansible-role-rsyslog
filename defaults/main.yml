@@ -17,16 +17,16 @@ rsyslog_additional_config: {}
 
 services:
   loggly.com:
-    peer:       "*.loggly.com"
-    url:        logs-01.loggly.com
-    cert_name:  syslogca.crt
-    cert_path:  https://logdog.loggly.com/media/
-    port:       514
-    port_tls:   6514
+    peer:      "*.loggly.com"
+    url:       logs-01.loggly.com
+    cert_name: syslogca.crt
+    cert_path: https://logdog.loggly.com/media/
+    port:      514
+    port_tls:  6514
   logz.io:
-    peer:       "*.logz.io"
-    url:        listener.logz.io
-    cert_name:  logzio.crt
-    cert_path:  https://raw.githubusercontent.com/papanito/ansible-rsyslog/master/templates/
-    port:       5000
-    port_tls:   5001
+    peer:      "*.logz.io"
+    url:       listener.logz.io
+    cert_name: TrustExternalCARoot_and_USERTrustRSAAAACA.crt
+    cert_path: https://raw.githubusercontent.com/logzio/public-certificates/master/
+    port:      5000
+    port_tls:  5001
