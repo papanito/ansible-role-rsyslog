@@ -12,7 +12,7 @@
     state: directory
 
 - name: TLS | check for existing certificates
-  shell: ls -l {{ rsyslog_cert_path }}
+  shell: ls -l {{ rsyslog_cert_path }} # noqa 305
   register: capture
   changed_when: false
 

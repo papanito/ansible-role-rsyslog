@@ -26,7 +26,7 @@
   changed_when: false
 
 - name: Check for existing config files
-  shell: ls -l {{ rsyslog_conf_path }}
+  shell: ls -l {{ rsyslog_conf_path }} # noqa 305
   register: capture
   changed_when: false
 
@@ -42,7 +42,7 @@
   notify: Restart rsyslog
 
 - name: Check which init system is in place
-  shell: set -e && cat /proc/1/status | grep '[Nn]ame'|sed 's/[Nn]ame:\s*//'
+  shell: set -e -o pipefail && cat /proc/1/status | grep '[Nn]ame'|sed 's/[Nn]ame:\s*//'
   register: init_system
   changed_when: false
 
