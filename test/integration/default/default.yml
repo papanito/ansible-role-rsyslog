@@ -3,5 +3,4 @@
 
 - hosts: all
   roles:
-    - ansible-loggly
-  
+    - ansible-role-syslog
