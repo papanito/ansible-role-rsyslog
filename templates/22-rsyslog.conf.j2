@@ -21,8 +21,8 @@ $ActionResumeRetryCount {{ rsyslog_action_resume_retry_count }}
 
 {% if rsyslog_tls %}$DefaultNetstreamDriverCAFile {{ rsyslog_cert_path }}/{{ rsyslog_cert }}{% endif %}
 
-template(name="loggly.com" type="string" string="<%pri%>%protocol-version% %timestamp:::date-rfc3339% {{ inventory_hostname }} %app-name% %procid% %msgid% [{{ rsyslog_token }}@41058 {% if rsyslog_tag %}tag=\"{{ rsyslog_tag }}\"{% endif %}] %msg%\n")
-template(name="logz.io" type="string" string="[{{ rsyslog_token }}] <%pri%>%protocol-version% %timestamp:::date-rfc3339% {{ inventory_hostname }} %app-name% %procid% %msgid% %msg%\n")
+template(name="loggly.com" type="string" string="<%pri%>%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% [{{ rsyslog_token }}@41058 {% if rsyslog_tag %}tag=\"{{ rsyslog_tag }}\"{% endif %}] %msg%\n")
+template(name="logz.io" type="string" string="[{{ rsyslog_token }}] <%pri%>%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% %msg%\n")
 
 # Send messages over TCP using the template.
 {% if rsyslog_tls %}
