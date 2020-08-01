@@ -43,7 +43,7 @@
   notify: Restart rsyslog
 
 - name: Check which init system is in place
-  shell: cat /proc/1/status | grep '[Nn]ame'|sed 's/[Nn]ame:\s*//'a # noqa 306
+  shell: cat /proc/1/status | grep '[Nn]ame'|sed 's/[Nn]ame:\s*//' # noqa 306
   register: init_system
   changed_when: false
 
