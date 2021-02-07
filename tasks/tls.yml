@@ -1,6 +1,4 @@
-# Securely send your logs to Loggly using TLS encryption. 
-# https://www.loggly.com/docs/rsyslog-tls-configuration/
-
+# Securely send your logs to Loggly using TLS encryption.
 - name: TLS | Install required software
   package:
     name: rsyslog-gnutls
@@ -11,6 +9,16 @@
     path: '{{ rsyslog_cert_path }}'
     state: directory
     mode: 0644
+  when: rsyslog_services[rsyslog_srv].cert_path is not defined
+
+- name: TLS | Override default cert path
+  ansible.builtin.set_fact:
+    rsyslog_cert_path: rsyslog_services[rsyslog_srv].cert_path
+  when: rsyslog_services[rsyslog_srv].cert_path is defined
+
+- name: TLS | Load Debian and RHEL specific variables
+  include_vars: vars_debian_rhel.yml
+  when: ansible_os_family == 'RedHat' or ansible_os_family == 'Debian'
 
 ## use specific certificate
 - block:
@@ -25,9 +33,8 @@
     file: path={{ item.path }} state=absent
     with_items: '{{ found_files.files }}'
     when: rsyslog_cert not in item.path
-    ignore_errors: True
   - name: TLS | Download certificate
     get_url:
-      url: "{{ rsyslog_services[rsyslog_srv].cert_path }}{{ rsyslog_services[rsyslog_srv].cert_name }}"
+      url: "{{ rsyslog_services[rsyslog_srv].cert_url }}{{ rsyslog_services[rsyslog_srv].cert_name }}"
       dest: "{{ rsyslog_cert_path }}/{{ rsyslog_cert }}"
-  when: rsyslog_services[rsyslog_srv].cert_name is defined
+  when: rsyslog_services[rsyslog_srv].cert_url is defined

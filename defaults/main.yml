@@ -1,10 +1,12 @@
 ---
-rsyslog_srv:       logz.io # set this to use the correct service
-rsyslog_tls:       true
-rsyslog_tag:       syslog
-rsyslog_token:     YOUR_TOKEN_GOES_HERE
-rsyslog_cert:      rsyslog.crt
+rsyslog_srv: logz.io # set this to use the correct service
+rsyslog_tls: true
+rsyslog_tag: syslog
+rsyslog_token: YOUR_TOKEN_GOES_HERE
+rsyslog_cert: rsyslog.crt
 rsyslog_cert_path: /etc/rsyslog.d/keys/
+rsyslog_cert_default: ca-certificates.crt
+rsyslog_cert_path_default: /etc/ssl/certs/
 rsyslog_conf_path: /etc/rsyslog.d/
 rsyslog_conf_file: 22-rsyslog.conf
 
@@ -20,13 +22,20 @@ rsyslog_services:
     peer:      "*.loggly.com"
     url:       logs-01.loggly.com
     cert_name: syslogca.crt
-    cert_path: https://logdog.loggly.com/media/
+    cert_url:  https://logdog.loggly.com/media/
     port:      514
     port_tls:  6514
   logz.io:
     peer:      "*.logz.io"
     url:       listener.logz.io
     cert_name: TrustExternalCARoot_and_USERTrustRSAAAACA.crt
-    cert_path: https://raw.githubusercontent.com/logzio/public-certificates/master/
+    cert_url:  https://raw.githubusercontent.com/logzio/public-certificates/master/
     port:      5000
     port_tls:  5001
+  newrelic.com:
+    peer:      "*.syslog.nr-data.net"
+    cert_path: /etc/ssl/certs/
+    cert_name: ca-certificates.crt
+    url:       newrelic.syslog.nr-data.net
+    port:      6514
+    port_tls:  6514

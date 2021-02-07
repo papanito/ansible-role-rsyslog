@@ -1,6 +1,6 @@
 #===============================================================================
 #
-# Forward syslog to Loggly.com
+# Forward syslog to {{ rsyslog_srv }}
 #
 #-------------------------------------------------------------------------------
 # {{ ansible_managed }}
@@ -19,10 +19,21 @@ $ActionResumeRetryCount {{ rsyslog_action_resume_retry_count }}
 {{ line }}
 {% endfor %}
 
-{% if rsyslog_tls %}$DefaultNetstreamDriverCAFile {{ rsyslog_cert_path }}/{{ rsyslog_cert }}{% endif %}
+{% if rsyslog_tls %}
+{% if services[rsyslog_srv].cert_name is defined %}
+$DefaultNetstreamDriverCAFile {{ rsyslog_cert_path }}/{{ rsyslog_cert }}
+{% else %}
+$DefaultNetstreamDriverCAFile {{ rsyslog_cert_path_default }}/{{ rsyslog_cert_default }}
+{% endif %}
+{% endif %}
 
-template(name="loggly.com" type="string" string="<%pri%>%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% [{{ rsyslog_token }}@41058 {% if rsyslog_tag %}tag=\"{{ rsyslog_tag }}\"{% endif %}] %msg%\n")
-template(name="logz.io" type="string" string="[{{ rsyslog_token }}] <%pri%>%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% %msg%\n")
+{% if rsyslog_srv == "loggly.com" %}
+template(name="{{ rsyslog_srv }}" type="string" string="<%pri%>%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% [{{ rsyslog_token }}@41058 {% if rsyslog_tag %}tag=\"{{ rsyslog_tag }}\"{% endif %}] %msg%\n")
+{% elif rsyslog_srv == "logz.io" %}
+template(name="{{ rsyslog_srv }}" type="string" string="[{{ rsyslog_token }}] <%pri%>%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% %msg%\n")
+{% elif rsyslog_srv == "newrelic.com" %}
+template(name="{{ rsyslog_srv }}" type="string" string="{{ rsyslog_token }} <%pri%>%protocol-version% %timestamp:::date-rfc3339% %hostname% %app-name% %procid% %msgid% %structured-data% %msg%\n")
+{% endif %}
 
 # Send messages over TCP using the template.
 {% if rsyslog_tls %}

@@ -1,0 +1,23 @@
+---
+rsyslog_services:
+  loggly.com:
+    peer:      "*.loggly.com"
+    url:       logs-01.loggly.com
+    cert_name: syslogca.crt
+    cert_url:  https://logdog.loggly.com/media/
+    port:      514
+    port_tls:  6514
+  logz.io:
+    peer:      "*.logz.io"
+    url:       listener.logz.io
+    cert_name: TrustExternalCARoot_and_USERTrustRSAAAACA.crt
+    cert_url:  https://raw.githubusercontent.com/logzio/public-certificates/master/
+    port:      5000
+    port_tls:  5001
+  newrelic.com:
+    peer:      "*.syslog.nr-data.net"
+    cert_path: /etc/pki/tls/certs/
+    cert_name: ca-bundle.crt
+    url:       newrelic.syslog.nr-data.net
+    port:      6514
+    port_tls:  6514

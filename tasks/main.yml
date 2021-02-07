@@ -4,7 +4,12 @@
 # Software, released under the terms of the GPL v3.  See
 # http://www.gnu.org/copyleft/gpl.html for details.  Resist intellectual
 # serfdom - the ownership of ideas is akin to slavery.
----
+- name: Debug
+  debug:
+    msg: "{{ rsyslog_srv }}"
+- name: Debug
+  debug:
+    msg: "{{ services[rsyslog_srv] }}"
 
 - name: Ensure rsyslog is installed (Debian)
   apt:
@@ -35,7 +40,6 @@
   file: path={{ item.path }} state=absent
   with_items: '{{ found_files.files }}'
   when: rsyslog_conf_file not in item.path
-  ignore_errors: True
 
 - name: List the existing rsyslog_services
   debug:
