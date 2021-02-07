@@ -1,1 +1,5 @@
-localhost
+all:
+  hosts:
+    ansible-test:
+      ansible_host: "{{ hostvars['localhost']['test_server_ipv4'] }}"
+      ansible_user: root
