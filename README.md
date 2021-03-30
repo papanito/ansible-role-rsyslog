@@ -39,7 +39,7 @@ There are common role variables and service specific ones. Most variables should
 |`rsyslog_action_queue_save_on_shutdown`|save messages to disk on shutdown|`on`|
 |`rsyslog_action_queue_action_type`|type of the action queue|`LinkedList`|
 |`rsyslog_action_resume_retry_count`|number of retries if host is done, ,`-1` means infinite|`-1`|
-|`rsyslog_additional_config`|list of additional config like `authpriv.*      /var/log/auth.log`|none|
+|`rsyslog_additional_config`|list of additional config like `authpriv.*      /var/log/auth.log`| `''` |
 
 ## Dependencies
 
