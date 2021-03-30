@@ -1,14 +1,14 @@
-- name: Forward server logs to rsyslog service
-  hosts: "{{ target }}"
+---
+- hosts: localhost
   vars:
-    - rsyslog_srv: logz.io # set this to use the correct service
-    - rsyslog_tls: true
-    - rsyslog_tag: syslog
-    - services:
+    rsyslog_srv: logz.io # set this to use the correct service
+    rsyslog_tls: true
+    rsyslog_tag: syslog
+    services:
       loggly.com:
         token: YOUR_TOKEN
       logz.io:
         token: YOUR_TOKEN
 
   roles:
-     - ansible.rsyslog
+    - ../ansible-role-rsyslog
