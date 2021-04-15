@@ -15,7 +15,7 @@ rsyslog_action_queue_action_type: 'LinkedList'
 rsyslog_action_resume_retry_count: -1
 rsyslog_additional_config: {}
 
-services:
+rsyslog_services:
   loggly.com:
     peer:      "*.loggly.com"
     url:       logs-01.loggly.com

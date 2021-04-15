@@ -26,7 +26,7 @@ template(name="logz.io" type="string" string="[{{ rsyslog_token }}] <%pri%>%prot
 
 # Send messages over TCP using the template.
 {% if rsyslog_tls %}
-action(type="omfwd" protocol="tcp" target="{{ services[rsyslog_srv].url }}" port="{{ services[rsyslog_srv].port_tls  }}" template="{{ rsyslog_srv }}" StreamDriver="gtls" StreamDriverMode="1" StreamDriverAuthMode="x509/name" StreamDriverPermittedPeers="{{ services[rsyslog_srv].peer }}")
+action(type="omfwd" protocol="tcp" target="{{ rsyslog_services[rsyslog_srv].url }}" port="{{ rsyslog_services[rsyslog_srv].port_tls  }}" template="{{ rsyslog_srv }}" StreamDriver="gtls" StreamDriverMode="1" StreamDriverAuthMode="x509/name" StreamDriverPermittedPeers="{{ rsyslog_services[rsyslog_srv].peer }}")
 {% else %}
-action(type="omfwd" protocol="tcp" target="{{ services[rsyslog_srv].url }}" port="{{ services[rsyslog_srv].port }}" template="{{ rsyslog_srv }}")
+action(type="omfwd" protocol="tcp" target="{{ rsyslog_services[rsyslog_srv].url }}" port="{{ rsyslog_services[rsyslog_srv].port }}" template="{{ rsyslog_srv }}")
 {% endif %}

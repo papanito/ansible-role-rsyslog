@@ -35,6 +35,6 @@
       mode: 0644
   - name: TLS | Download certificate
     get_url:
-      url: "{{ services[rsyslog_srv].cert_path }}{{ services[rsyslog_srv].cert_name }}"
+      url: "{{ rsyslog_services[rsyslog_srv].cert_path }}{{ rsyslog_services[rsyslog_srv].cert_name }}"
       dest: "{{ rsyslog_cert_path }}/{{ rsyslog_cert }}"
-  when: services[rsyslog_srv].cert_name is defined
+  when: rsyslog_services[rsyslog_srv].cert_name is defined

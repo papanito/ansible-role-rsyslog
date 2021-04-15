@@ -36,9 +36,9 @@
   when: item != rsyslog_conf_file
   ignore_errors: True
 
-- name: debu 
+- name: List the existing rsyslog_services
   debug:
-    msg: "{{ services }}"
+    msg: "{{ rsyslog_services }}"
   tags:
     - debug
 
