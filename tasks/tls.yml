@@ -19,7 +19,7 @@
       path: '{{ rsyslog_cert_path }}'
       state: directory
       mode: 0644
-  - name: TLS | check for existing certificates
+  - name: TLS | check for existing certificates # noqa 305
     shell: ls -l {{ rsyslog_cert_path }} # noqa 305
     register: capture
     changed_when: false

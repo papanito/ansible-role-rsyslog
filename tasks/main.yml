@@ -26,7 +26,7 @@
   changed_when: false
 
 - name: Check for existing config files
-  shell: ls -l {{ rsyslog_conf_path }} # noqa 305
+  shell: ls {{ rsyslog_conf_path }} # noqa 305
   register: capture
   changed_when: false
 
@@ -35,6 +35,12 @@
   with_items: "{{ capture.stdout_lines }}"
   when: item != rsyslog_conf_file
   ignore_errors: True
+
+- name: debu 
+  debug:
+    msg: "{{ services }}"
+  tags:
+    - debug
 
 - name: Ensure rsyslog config is present
   template:
