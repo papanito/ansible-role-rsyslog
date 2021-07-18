@@ -1,14 +1,6 @@
 # Ansible role "papanito.rsyslog" <!-- omit in toc -->
 
-![Ansible Role](https://img.shields.io/ansible/role/46965) ![Ansible Quality Score](https://img.shields.io/ansible/quality/46965) ![Ansible Role](https://img.shields.io/ansible/role/d/46965) ![GitHub issues](https://img.shields.io/github/issues/papanito/ansible-role-rsyslog) ![GitHub pull requests](https://img.shields.io/github/issues-pr/papanito/ansible-role-rsyslog)
-
-- [Remark](#remark)
-- [Requirements](#requirements)
-- [Role Variables](#role-variables)
-- [Dependencies](#dependencies)
-- [Testing](#testing)
-- [Example Playbook](#example-playbook)
-- [License](#license)
+[![Ansible Role](https://img.shields.io/ansible/role/46965)](https://galaxy.ansible.com/papanito/rsyslog) [![Ansible Quality Score](https://img.shields.io/ansible/quality/46965)](https://galaxy.ansible.com/papanito/rsyslog) [![Ansible Role](https://img.shields.io/ansible/role/d/46965)](https://galaxy.ansible.com/papanito/rsyslog) [![GitHub issues](https://img.shields.io/github/issues/papanito/ansible-role-rsyslog)](https://github.com/papanito/ansible-role-rsyslog/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/papanito/ansible-role-rsyslog)](https://github.com/papanito/ansible-role-rsyslog/pulls)
 
 Ansible role to forward syslog to a log service like [Loggly.com](https://loggly.com) or [Logz.io](https://logz.io). The role also forwards the systemd logs to syslog. Details regarding the syslog configuration can be found here:
 
