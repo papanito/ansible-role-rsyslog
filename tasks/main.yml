@@ -10,14 +10,12 @@
   apt:
     name: rsyslog
     state: present
-    update_cache: yes
   when: ansible_os_family == 'Debian'
 
 - name: Ensure rsyslog is installed (RedHat)
   yum:
     name: rsyslog
     state: present
-    update_cache: yes
   when: ansible_os_family == 'RedHat'
 
 - name: Ensure rsyslog for tls config is present
