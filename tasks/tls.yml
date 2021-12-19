@@ -1,11 +1,32 @@
 # Securely send your logs to Loggly using TLS encryption.
+- name: Update Package Cache (apt/Ubuntu)
+  tags: always
+  apt:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update Package Cache (dnf/CentOS)
+  tags: always
+  dnf:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "CentOS"
+
+- name: Update Package Cache (yum/Amazon)
+  tags: always
+  yum:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Amazon"
+
 - name: TLS | Install required software
-  package:
+  ansible.builtin.package:
     name: rsyslog-gnutls
     state: present
 
 - name: TLS | Ensure key directory exists
-  file:
+  ansible.builtin.file:
     path: '{{ rsyslog_cert_path }}'
     state: directory
     mode: 0644
@@ -23,14 +44,14 @@
 ## use specific certificate
 - block:
   - name: TLS | check for existing certificates
-    find:
+    ansible.builtin.find:
       path: "{{ rsyslog_cert_path }}"
       patterns: "*"
       recurse: no
     register: found_files
     changed_when: false
   - name: TLS | remove unexpected certificates
-    file: path={{ item.path }} state=absent
+    ansible.builtin.file: path={{ item.path }} state=absent
     with_items: '{{ found_files.files }}'
     when: rsyslog_cert not in item.path
   - name: TLS | Download certificate

@@ -9,7 +9,7 @@
     msg: "{{ rsyslog_srv }}"
 - name: Debug
   debug:
-    msg: "{{ services[rsyslog_srv] }}"
+    msg: "{{ rsyslog_services[rsyslog_srv] }}"
 
 - name: Ensure rsyslog is installed (Debian)
   apt:
