@@ -11,4 +11,4 @@
         token: YOUR_TOKEN
 
   roles:
-    - ../ansible-role-rsyslog
+    - ansible-role-rsyslog

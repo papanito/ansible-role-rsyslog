@@ -36,7 +36,7 @@
     rsyslog_additional_config:
       - "authpriv.*      /var/log/auth.log"
   roles:
-    - ../ansible-role-rsyslog
+    - ansible-role-rsyslog
 
 - hosts: localhost
   gather_facts: no
