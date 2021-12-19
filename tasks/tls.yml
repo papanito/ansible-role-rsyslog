@@ -6,7 +6,7 @@
     name: rsyslog-gnutls
     state: present
 
-- name: TLS | Ensure directory exists
+- name: TLS | Ensure key directory exists
   file:
     path: '{{ rsyslog_cert_path }}'
     state: directory
@@ -14,25 +14,18 @@
 
 ## use specific certificate
 - block:
-  - name: TLS | Ensure directory exists
-    file:
-      path: '{{ rsyslog_cert_path }}'
-      state: directory
-      mode: 0644
-  - name: TLS | check for existing certificates # noqa 305
-    shell: ls -l {{ rsyslog_cert_path }} # noqa 305
-    register: capture
+  - name: TLS | check for existing certificates
+    find:
+      path: "{{ rsyslog_cert_path }}"
+      patterns: "*"
+      recurse: no
+    register: found_files
     changed_when: false
   - name: TLS | remove unexpected certificates
-    file: path={{ rsyslog_cert_path }}/{{ item }} state=absent
-    with_items: '{{ capture.stdout_lines }}'
-    when: item != rsyslog_cert
+    file: path={{ item.path }} state=absent
+    with_items: '{{ found_files.files }}'
+    when: rsyslog_cert not in item.path
     ignore_errors: True
-  - name: TLS | Create certificate folder for tls
-    file:
-      path: "{{ rsyslog_cert_path }}"
-      state: directory
-      mode: 0644
   - name: TLS | Download certificate
     get_url:
       url: "{{ rsyslog_services[rsyslog_srv].cert_path }}{{ rsyslog_services[rsyslog_srv].cert_name }}"
