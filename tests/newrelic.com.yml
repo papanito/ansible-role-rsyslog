@@ -1,0 +1,60 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  pre_tasks:
+  - name: Create a basic test server
+    hetzner.hcloud.hcloud_server:
+      name: ansible-test
+      server_type: cx11
+      image: debian-10
+      state: started
+      ssh_keys: 
+        - ansible-user
+        - aedu-clawfinger
+      api_token: "{{ lookup('env', 'HCLOUD_TOKEN') }}"
+    delegate_to: localhost
+    register: result
+
+  - name: Store ipv4 of host
+    set_fact:
+      test_server_ipv4: "{{ result.hcloud_server.ipv4_address }}"
+
+  - name: Waits until server is ready
+    wait_for:
+      host: "{{ test_server_ipv4 }}"
+      port: 22
+      delay: 2
+    delegate_to: localhost
+
+- hosts: ansible-test
+  remote_user: root
+  vars:
+    rsyslog_srv: newrelic.com
+    rsyslog_tls: true
+    rsyslog_tag: syslog
+    rsyslog_token: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      38623664613932623264363262333233316161623239336566326630393936373565626230666363
+      6537313839313130623136646162623436353238316632640a636136326238613238626335376263
+      32353230663636373133333763373161303362613162336536366264303762366164343037646664
+      3433623161336437640a643832343665353937353065306431356135346532393461383631633038
+      34333235633336616338366432643261303635663738633766366662393437376534626564363366
+      3337396135343464303732363131653738656537633664393463
+    rsyslog_additional_config:
+      - "authpriv.*      /var/log/auth.log"
+  roles:
+    - ansible-role-rsyslog
+
+- hosts: localhost
+  gather_facts: no
+  vars:
+    stop_server: false
+
+  pre_tasks:
+  - name: Shutdown test server
+    hcloud_server:
+      name: ansible-test
+      state: stopped
+    delegate_to: localhost
+    when: stop_server is defined and stop_server

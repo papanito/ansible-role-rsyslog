@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  pre_tasks:
+  - name: Create a basic test server
+    hcloud_server:
+      name: ansible-test
+      server_type: cx11
+      image: debian-10
+      state: started
+      ssh_keys: 
+        - ansible-user
+        - aedu-clawfinger
+    delegate_to: localhost
+    register: result
+
+  - name: Store ipv4 of host
+    set_fact:
+      test_server_ipv4: "{{ result.hcloud_server.ipv4_address }}"
+
+- hosts: ansible-test
+  remote_user: root
+  vars:
+    rsyslog_srv: logz.io
+    rsyslog_tls: true
+    rsyslog_tag: syslog
+    rsyslog_token: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      63656163383539626261636132353134376466366564646163616231323232386630636637346336
+      3435653339323038306238326331323739623339303331650a636135663338343136356537636263
+      38323133303532623439336562646331393232326339333266656630396238303038326235623037
+      6634653434326636660a313331303139633838663830346433326637633966623238363530313265
+      38313363356662623435626635653436643132623063363035333435306335316234653438613330
+      6437613632623637373933353239313761313962356262373739
+    rsyslog_additional_config:
+      - "authpriv.*      /var/log/auth.log"
+  roles:
+    - ansible-role-rsyslog
+
+- hosts: localhost
+  gather_facts: no
+  vars:
+    stop_server: false
+
+  pre_tasks:
+  - name: Shutdown test server
+    hcloud_server:
+      name: ansible-test
+      state: stopped
+    delegate_to: localhost
+    when: stop_server
